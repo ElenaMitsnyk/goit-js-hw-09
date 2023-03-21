@@ -24,7 +24,7 @@ const options = {
   onClose(selectedDates) {
     console.log(selectedDates[0]);
 
-
+    
     // перевірка на вибір майбутньої дати
     if (selectedDates[0] < new Date()) {
       Notiflix.Report.failure('Please choose a date in the future');

@@ -3,16 +3,16 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 
 const refs = {
-  containerEl: document.querySelector('body'),
-  textInputEl: document.querySelector('#datetime-picker'),
-  buttonStartEl: document.querySelector('[data-start]'),
+  section: document.querySelector('body'),
+  input: document.querySelector('#datetime-picker'),
+  startBtn: document.querySelector('[data-start]'),
   valueDaysEl: document.querySelector('[data-days]'),
   valueHoursEl: document.querySelector('[data-hours]'),
   valueMinutesEl: document.querySelector('[data-minutes]'),
   valueSecondsEl: document.querySelector('[data-seconds]'),
 };
 
-refs.buttonStartEl.disabled = true;
+refs.startBtn.disabled = true;
 
 let timerId = null;
 
@@ -23,24 +23,27 @@ const options = {
   minuteIncrement: 1,
   onClose(selectedDates) {
     console.log(selectedDates[0]);
+
+
     // перевірка на вибір майбутньої дати
     if (selectedDates[0] < new Date()) {
       Notiflix.Report.failure('Please choose a date in the future');
-      refs.buttonStartEl.disabled = true;
+      refs.startBtn.disabled = true;
     } else {
       // якщо обрана майбутня дата, то кнопка СТАРТ вмикається
-      refs.buttonStartEl.disabled = false;
-      Notiflix.Report.success('Congratulation!', 'Click on start!', 'Okay');
-      refs.buttonStartEl.addEventListener('click', () => {
+      refs.startBtn.disabled = false;
+      Notiflix.Report.success('Congratulation!');
+      
+      refs.startBtn.addEventListener('click', () => {
         enterTimeData(selectedDates[0]);
       });
     }
   },
 };
 // виклик функції для кросбраузерного вибору кінцевої дати та часу
-flatpickr(refs.textInputEl, options);
+flatpickr(refs.input, options);
 
-//!Приймає число та приводить до строки, додаючи в початок 0, якщо число менше 2-х знаків
+//Приймає число та приводить до строки, додаючи в початок 0, якщо число менше 2-х знаків
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
@@ -69,7 +72,7 @@ function enterTimeData(selectedDate) {
   timerId = setInterval(() => {
     const deltaTime = selectedDate - new Date();
 
-    refs.buttonStartEl.disabled = true;
+    refs.startBtn.disabled = true;
     if (deltaTime > 0) {
       const { days, hours, minutes, seconds } = convertMs(deltaTime);
       refs.valueDaysEl.textContent = days;
@@ -82,3 +85,4 @@ function enterTimeData(selectedDate) {
   }, 1000);
 }
 
+refs.section.style.textAlign = 'center';
